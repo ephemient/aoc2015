@@ -1,14 +1,14 @@
 module Day7Spec (spec) where
 
 import Data.Map.Lazy (fromList)
-import Day7 (day7a, day7b)
+import Day7 (day7)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 spec :: Spec
 spec =
     describe "part 1" $
         it "examples" $
-            day7a (unlines [
+            day7 (unlines [
                 "123 -> x",
                 "456 -> y",
                 "x AND y -> d",

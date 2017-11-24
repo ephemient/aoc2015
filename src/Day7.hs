@@ -1,4 +1,4 @@
-module Day7 (day7a, day7b) where
+module Day7 (day7, day7a, day7b) where
 
 import Control.Applicative ((<$>))
 import Control.Monad (ap)
@@ -47,9 +47,12 @@ run wires = values where
     eval (RShift x y) = ref x `shiftR` fromIntegral (ref y)
     eval (Not x) = complement $ ref x
 
-day7a :: String -> Either ParseError (Map String Word16)
-day7a = fmap run . runParser gates () ""
+day7 :: String -> Either ParseError (Map String Word16)
+day7 = fmap run . runParser gates () ""
 
-day7b :: String -> Either ParseError (Map String Word16)
-day7b = fmap (run . mangle) . runParser gates () "" where
+day7a :: String -> Either ParseError Word16
+day7a = fmap (! "a") . day7
+
+day7b :: String -> Either ParseError Word16
+day7b = fmap ((! "a") . run . mangle) . runParser gates () "" where
     mangle wires = Map.insert "b" (Const . Right $ run wires ! "a") wires
