@@ -6,6 +6,7 @@ import Day2 (day2a, day2b)
 import Day3 (day3a, day3b)
 import Day4 (day4a, day4b)
 import Day5 (day5a, day5b)
+import Day6 (day6a, day6b)
 import Paths_aoc2015 (getDataFileName)
 
 run :: Int -> [String -> String] -> IO ()
@@ -22,3 +23,4 @@ main = do
     run 3 [show . day3a, show . day3b]
     run 4 [show . day4a, show . day4b]
     run 5 [show . day5a, show . day5b]
+    run 6 [show . day6a, show . day6b]
