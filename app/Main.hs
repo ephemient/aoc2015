@@ -16,6 +16,7 @@ import Day13 (day13a, day13b)
 import Day14 (day14a, day14b)
 import Day15 (day15a, day15b)
 import Day16 (day16a, day16b)
+import Day17 (day17a, day17b)
 import Paths_aoc2015 (getDataFileName)
 
 run :: Int -> [String -> String] -> IO ()
@@ -43,3 +44,4 @@ main = do
     run 14 [either show show . day14a, either show show . day14b]
     run 15 [either show show . day15a, either show show . day15b]
     run 16 [either show id . day16a, either show id . day16b]
+    run 17 [show . day17a 150, show . day17b 150]
