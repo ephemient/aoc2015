@@ -1,7 +1,6 @@
 module Day15 (day15a, day15b, optimalCookie) where
 
 import Control.Monad (ap)
-import Control.Monad.Except ()
 import Data.Functor (($>))
 import Data.List (maximumBy, transpose)
 import Data.Maybe (fromMaybe)

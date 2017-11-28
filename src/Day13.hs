@@ -1,11 +1,10 @@
 {-# LANGUAGE TupleSections, TypeApplications #-}
 module Day13 (day13a, day13b) where
 
-import Control.Applicative ((<*))
 import Data.Functor (($>))
 import Data.Function (on)
 import Data.Graph.Inductive (Graph, Gr, LEdge, delNode, edgeLabel, insEdges, insNode, lneighbors, mkGraph, newNodes, nodes, toLEdge)
-import qualified Data.Map as Map (assocs, fromListWith)
+import qualified Data.Map.Lazy as Map (assocs, fromListWith)
 import Data.List (elemIndex, nub)
 import Data.Maybe (mapMaybe)
 import Data.Tuple (swap)

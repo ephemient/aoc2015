@@ -1,7 +1,5 @@
 module Day14 (day14a, day14b) where
 
-import Control.Applicative ((<*))
-import Data.Functor ((<$>))
 import Data.List (group, sort)
 import Text.Parsec (ParseError, ParsecT, eof, many1, parse, sepEndBy)
 import Text.Parsec.Char (digit, letter, newline, string)

@@ -1,8 +1,7 @@
 module Day16 (day16a, day16b) where
 
-import Control.Monad.Except ()
-import Data.Map (Map)
-import qualified Data.Map as Map (assocs, fromList, lookup)
+import qualified Data.Map.Lazy as Map (assocs, fromList, lookup)
+import Data.Map.Lazy (Map)
 import Text.Parsec (ParseError, ParsecT, eof, many1, parse, sepBy, sepEndBy)
 import Text.Parsec.Char (alphaNum, newline, string)
 

@@ -1,8 +1,6 @@
 module Day7 (day7, day7a, day7b) where
 
-import Control.Applicative ((<$>))
 import Control.Monad (ap)
-import Control.Monad.Except ()
 import Data.Bits (Bits, (.&.), (.|.), complement, shiftL, shiftR)
 import Data.Word (Word16)
 import qualified Data.Map.Lazy as Map (fromList, insert, map)

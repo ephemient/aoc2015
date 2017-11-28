@@ -1,6 +1,5 @@
 module Day6 (day6a, day6b) where
 
-import Control.Monad.Except ()
 import Data.Array ((!), (//), elems, listArray)
 import Data.Ix (range)
 import Text.Parsec (ParseError, choice, eof, getState, many1, modifyState, runParser, sepEndBy, try)

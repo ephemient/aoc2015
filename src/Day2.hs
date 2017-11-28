@@ -1,6 +1,5 @@
 module Day2 (day2a, day2b) where
 
-import Control.Monad.Except ()
 import Text.Parsec (ParseError, Parsec, eof, many1, parse)
 import Text.Parsec.Char (char, digit)
 
