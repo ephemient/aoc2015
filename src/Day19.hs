@@ -1,6 +1,7 @@
-module Day19 (day19a) where
+module Day19 (day19a, day19b) where
 
-import Data.List (isPrefixOf, inits, nub, tails)
+import Data.List (findIndex, foldl', inits, isPrefixOf, nub, tails)
+import qualified Data.Map.Strict as Map (empty, foldlWithKey', insertWith, member, null, singleton)
 import Text.Parsec (ParseError, ParsecT, eof, many, many1, optional, parse)
 import Text.Parsec.Char (alphaNum, newline, string)
 
@@ -31,7 +32,26 @@ step replacements molecule =
   , from `isPrefixOf` rest
   ]
 
+search :: (Ord a) => [a] -> [([a], [a])] -> [a] -> Maybe Int
+search target replacements start =
+    findIndex (Map.member target) . takeWhile (not . Map.null) $
+    iterate next (Map.singleton start 0)
+  where
+    next = Map.foldlWithKey' add Map.empty
+    add m s k = foldl' (flip . uncurry $ Map.insertWith min) m $ rstep s k
+    rstep s k =
+      [ (prefix ++ from ++ dropZip to rest, max 0 $ k - length to)
+      | (from, to) <- replacements
+      , (prefix, rest) <- drop (k - length to + 1) $ zip (inits s) (tails s)
+      , to `isPrefixOf` rest
+      ]
+
 day19a :: String -> Either ParseError Int
 day19a string = do
     (start, replacements) <- parse machine "" string
     return . length . nub $ step replacements start
+
+day19b :: String -> Either ParseError (Maybe Int)
+day19b string = do
+    (target, replacements) <- parse machine "" string
+    return $ search "e" replacements target
