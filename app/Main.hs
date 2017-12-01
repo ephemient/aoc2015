@@ -50,4 +50,4 @@ main = do
     run 17 [show . day17a 150, show . day17b 150]
     run 18 [show . day18a, show . day18b]
     run 19 [either show show . day19a, either show (maybe "(\x22a5)" show) . day19b]
-    run 20 [maybe "(\x22a5)" show . day12a]
+    run 20 [maybe "(\x22a5)" show . day20a, maybe "(\x22a5)" show . day20b]
