@@ -1,16 +1,23 @@
+{-# LANGUAGE TypeApplications #-}
 module Day4 (day4a, day4b) where
 
 import Control.Monad (guard)
-import Crypto.Hash (Digest, MD5, hash)
+import Control.Parallel.Strategies (parBuffer, rseq, withStrategy)
+import Crypto.Hash (Digest, HashAlgorithm, MD5, hash)
 import Data.Bits ((.&.))
 import Data.ByteArray (Bytes, convert)
 import Data.ByteArray.Parse (Result(ParseOK), anyByte, byte, parse)
+import Data.ByteString (ByteString)
 import Data.ByteString.Char8 (pack)
 import Data.List (findIndex)
+import GHC.Conc (numCapabilities)
+
+hashes :: (HashAlgorithm a) => String -> [Digest a]
+hashes string = withStrategy (parBuffer numCapabilities rseq) $
+    hash . pack . (string ++) . show <$> [0 :: Int ..]
 
 day4a :: String -> Maybe Int
-day4a string = findIndex hasZeros
-               [hash . pack $ string ++ show n :: Digest MD5 | n <- [0..]] where
+day4a = findIndex hasZeros . hashes @MD5 where
     hasZeros bs =
         case parse zeros (convert bs :: Bytes)
           of ParseOK _ _ -> True
@@ -22,8 +29,7 @@ day4a string = findIndex hasZeros
         guard $ word .&. 0xF0 == 0x00
 
 day4b :: String -> Maybe Int
-day4b string = findIndex hasZeros
-               [hash . pack $ string ++ show n :: Digest MD5 | n <- [0..]] where
+day4b = findIndex hasZeros . hashes @MD5 where
     hasZeros bs =
         case parse zeros (convert bs :: Bytes)
           of ParseOK _ _ -> True
