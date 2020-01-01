@@ -1,7 +1,10 @@
 module Day19 (day19a, day19b) where
 
-import Data.List (findIndex, foldl', inits, isPrefixOf, nub, tails)
-import qualified Data.Map.Strict as Map (empty, foldlWithKey', insertWith, member, null, singleton)
+import Control.Monad (mfilter)
+import Data.List (inits, isPrefixOf, mapAccumL, nub, tails, unfoldr)
+import qualified Data.Map.Strict as Map (fromListWith, maxViewWithKey, splitLookup)
+import qualified Data.Set as Set (insert, member, singleton)
+import Data.Maybe (catMaybes)
 import Text.Parsec (ParseError, ParsecT, eof, many, many1, optional, parse)
 import Text.Parsec.Char (alphaNum, newline, string)
 
@@ -34,17 +37,25 @@ step replacements molecule =
 
 search :: (Ord a) => [a] -> [([a], [a])] -> [a] -> Maybe Int
 search target replacements start =
-    findIndex (Map.member target) . takeWhile (not . Map.null) $
-    iterate next (Map.singleton start 0)
-  where
-    next = Map.foldlWithKey' add Map.empty
-    add m s k = foldl' (flip . uncurry $ Map.insertWith min) m $ rstep s k
-    rstep s k =
-      [ (prefix ++ from ++ dropZip to rest, max 0 $ k - length to)
-      | (from, to) <- replacements
-      , (prefix, rest) <- drop (k - length to + 1) $ zip (inits s) (tails s)
-      , to `isPrefixOf` rest
-      ]
+    search' (Set.singleton start) [(0, start)] where
+    rmap = Map.fromListWith (++) [(dst, [src]) | (src, dst) <- replacements]
+    matchPrefix pre =
+        maybe [] ((:[]) . (,) pre) exact ++ unfoldr inexact rmap' where
+        (rmap', exact, _) = Map.splitLookup pre rmap
+        inexact = mfilter ((`isPrefixOf` pre) . fst . fst) . Map.maxViewWithKey
+    search' seen ((d, s):rest)
+      | s == target = Just d
+      | otherwise = search' seen' $ rest ++ map ((,) $! d + 1) new where
+        (seen', new) = fmap concat . mapAccumL f seen $ zip (inits s) (tails s)
+        f seen'' (pre, post) =
+            fmap concat . mapAccumL (g pre post) seen'' $ matchPrefix post
+        g pre post seen'' (dst, srcs) =
+            fmap catMaybes $ mapAccumL (h pre post dst) seen'' srcs
+        h pre post dst seen'' src
+          | Set.member t seen'' = (seen'', Nothing)
+          | otherwise = (Set.insert t seen'', Just t)
+          where t = pre ++ src ++ drop (length dst) post
+    search' _ _ = Nothing
 
 day19a :: String -> Either ParseError Int
 day19a string = do
