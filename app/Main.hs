@@ -25,6 +25,7 @@ import Day19 (day19a, day19b)
 import Day20 (day20a, day20b)
 import Day21 (day21a, day21b)
 import Day22 (day22a, day22b)
+import Day23 (day23a, day23b)
 import Paths_aoc2015 (getDataFileName)
 import System.Environment (getArgs)
 import Text.Read (readMaybe)
@@ -62,3 +63,4 @@ main = do
     run 20 [maybe "(\x22a5)" show . day20a, maybe "(\x22a5)" show . day20b]
     run 21 [either show (maybe "(\x22a5)" show) . day21a, either show (maybe "(\x22a5)" show) . day21b]
     run 22 [either show (maybe "(\x22a5)" show) . day22a, either show (maybe "(\x22a5)" show) . day22b]
+    run 23 [either show show . day23a, either show show . day23b]
