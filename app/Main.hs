@@ -1,5 +1,8 @@
+{-# LANGUAGE NondecreasingIndentation #-}
 module Main (main) where
 
+import Control.Monad (when)
+import Data.Maybe (mapMaybe)
 import Day1 (day1a, day1b)
 import Day2 (day2a, day2b)
 import Day3 (day3a, day3b)
@@ -21,9 +24,13 @@ import Day18 (day18a, day18b)
 import Day19 (day19a, day19b)
 import Day20 (day20a, day20b)
 import Paths_aoc2015 (getDataFileName)
+import System.Environment (getArgs)
+import Text.Read (readMaybe)
 
 run :: Int -> [String -> String] -> IO ()
 run i funcs = do
+    args <- mapMaybe readMaybe <$> getArgs
+    when (null args || i `elem` args) $ do
     putStrLn $ "Day " ++ show i
     contents <- getDataFileName ("day" ++ show i ++ ".txt") >>= readFile
     mapM_ (putStrLn . ($ contents)) funcs

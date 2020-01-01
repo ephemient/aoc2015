@@ -11,15 +11,10 @@ import Text.Parsec.Char (alphaNum, newline, string)
 machine :: (Monad m) => ParsecT String u m (String, [(String, String)])
 machine = do
     replacements <- many $ do
-        from <- many1 alphaNum
-        string " => "
-        to <- many1 alphaNum
-        newline
+        from <- many1 alphaNum <* string " => "
+        to <- many1 alphaNum <* newline
         return (from, to)
-    newline
-    special <- many1 alphaNum
-    optional newline
-    eof
+    special <- newline *> many1 alphaNum <* optional newline <* eof
     return (special, replacements)
 
 dropZip :: [a] -> [b] -> [b]
