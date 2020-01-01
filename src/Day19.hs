@@ -45,8 +45,9 @@ search target replacements start =
         inexact = mfilter ((`isPrefixOf` pre) . fst . fst) . Map.maxViewWithKey
     search' seen ((d, s):rest)
       | s == target = Just d
-      | otherwise = search' seen' $ rest ++ map ((,) $! d + 1) new where
-        (seen', new) = fmap concat . mapAccumL f seen $ zip (inits s) (tails s)
+      | otherwise = search' seen' . (++ rest) $ map ((,) $! d + 1) new where
+        (seen', new) =
+            fmap concat . mapAccumL f seen . take 15 $ zip (inits s) (tails s)
         f seen'' (pre, post) =
             fmap concat . mapAccumL (g pre post) seen'' $ matchPrefix post
         g pre post seen'' (dst, srcs) =
